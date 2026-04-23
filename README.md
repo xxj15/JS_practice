@@ -240,3 +240,142 @@ console.log(ans); // 수성
 - 배열의 인덱스는 **0부터** 시작하므로 사용자가 입력한 순번에서 1을 뺀다.
 - `planets[0]` → `'수성'`, `planets[1]` → `'금성'` 순서다.
 - `q - 1`로 1-based 순번을 0-based 인덱스로 변환하는 것이 핵심이다.
+
+---
+
+## P14 - 3의 배수 판별 (짝 게임)
+
+**문제:** 숫자 n이 주어질 때, 3의 배수이면 `'짝'`을, 아니면 n을 그대로 출력하세요.
+
+```js
+const inputs = [3, 5, 9, 7, 12];
+
+for (let n of inputs) {
+    if (n % 3 === 0) {
+        console.log('짝');
+    } else {
+        console.log(n);
+    }
+}
+```
+
+**해석:**
+
+- `%` : 나머지 연산자. `n % 3 === 0`이면 3의 배수다.
+- `for...of` : 배열의 요소를 하나씩 꺼내 순회하는 문법. 파이썬의 `for n in inputs:`와 동일하다.
+
+```js
+for (let n of inputs) { ... }
+// 파이썬: for n in inputs:
+```
+
+- `for...of`는 인덱스 없이 값만 필요할 때 사용한다. 인덱스도 필요하면 `forEach` 또는 일반 `for`문을 쓴다.
+
+**forEach vs for문 비교:**
+
+`forEach` — 배열 메서드. 콜백 함수로 값과 인덱스를 둘 다 받을 수 있다.
+
+```js
+inputs.forEach((n, i) => {
+    console.log(i, n); // 인덱스, 값 둘 다 사용 가능
+});
+```
+
+일반 `for`문 — 인덱스로 직접 접근. 중간에 `break`로 멈추거나 역순 순회 등 세밀한 제어가 필요할 때 쓴다.
+
+```js
+for (let i = 0; i < inputs.length; i++) {
+    console.log(i, inputs[i]);
+}
+```
+
+| | `for...of` | `forEach` | `for`문 |
+|---|---|---|---|
+| 인덱스 사용 | X | O | O |
+| `break` 사용 | O | X | O |
+| 코드 간결함 | O | O | 상대적으로 길다 |
+
+---
+
+## P15 - 템플릿 리터럴
+
+```js
+let n = '김다정';
+console.log(`안녕하세요. 저는 ${n}입니다.`);
+```
+
+**해석:** 백틱(`` ` ``)으로 감싸고 `${변수}`로 값을 삽입한다. 파이썬의 f-string(`f"..."`)과 동일하다.
+
+---
+
+## P16 - 문자열 뒤집기
+
+```js
+let n = '거꾸로';
+let ans = '';
+for (let i = n.length - 1; i >= 0; i--) {
+    ans += n[i];
+}
+console.log(ans); // 로꾸거
+```
+
+**해석:** `n.length - 1`부터 0까지 역순으로 인덱스를 줄이며 문자를 하나씩 이어붙인다. `n[i]`로 문자열의 특정 인덱스에 접근하는 방식은 파이썬과 동일하다.
+
+---
+
+## P17 - 조건 판별 (놀이기구 탑승)
+
+```js
+let people = [160, 135, 120, 150];
+
+for (let p of people) {
+    if (p >= 150) {
+        console.log('YES');
+    } else {
+        console.log('NO');
+    }
+}
+```
+
+**해석:** 150 이상이면 YES, 미만이면 NO를 출력한다.
+
+---
+
+## P18 - 평균 구하기
+
+```js
+let scores = [20, 30, 40];
+
+let sum = 0;
+for (let s of scores) {
+    sum += s;
+}
+
+sum /= scores.length;
+sum = Math.floor(sum);
+console.log(sum); // 30
+```
+
+**해석:** `sum /= scores.length`는 `sum = sum / scores.length`의 축약형. `Math.floor()`로 소수점을 버린다.
+
+---
+
+## P19 - 거듭제곱
+
+```js
+let a = 2, b = 3;
+console.log(a ** b); // 8
+```
+
+**해석:** `**`는 거듭제곱 연산자. `Math.pow(a, b)`와 동일하다.
+
+---
+
+## P20 - 몫과 나머지
+
+```js
+let a = 10, b = 2;
+console.log(Math.floor(a / b), a % b); // 5 0
+```
+
+**해석:** JS에는 파이썬의 `//` 연산자가 없어서 `Math.floor(a / b)`로 몫을 구한다. `%`는 나머지 연산자로 파이썬과 동일하다.
