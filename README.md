@@ -379,3 +379,161 @@ console.log(Math.floor(a / b), a % b); // 5 0
 ```
 
 **해석:** JS에는 파이썬의 `//` 연산자가 없어서 `Math.floor(a / b)`로 몫을 구한다. `%`는 나머지 연산자로 파이썬과 동일하다.
+
+---
+
+## 문제21 : set은 어떻게 만드나요?
+
+다음 중 set을 만드는 방법으로 올바른 것을 모두 고르시오.
+
+```
+1) var x = {1, 2, 3, 5, 6, 7};
+2) var x = {};
+3) var x = new Set('javascript');
+4) var x = new Set(range(5));
+5) var x = new Set();
+```
+
+**정답: 3번, 5번**
+
+**해설:**
+
+- **1번 X** : `{}`는 객체(Object)를 만드는 문법이다. `{1, 2, 3}` 형태는 JS에서 유효하지 않다.
+- **2번 X** : `{}`는 빈 객체다. 빈 Set이 아니다.
+- **3번 O** : `new Set()`은 이터러블을 인자로 받는다. 문자열도 이터러블이므로 각 문자를 요소로 갖는 Set이 만들어진다. (`{'j','a','v','s','c','r','i','p','t'}`)
+- **4번 X** : `range()`는 파이썬 함수다. JS에는 존재하지 않아 ReferenceError가 발생한다.
+- **5번 O** : 인자 없이 빈 Set을 생성한다.
+
+**JS에서 Set 만드는 올바른 방법:**
+
+```js
+var a = new Set();           // 빈 Set
+var b = new Set([1, 2, 3]);  // 배열로 생성
+var c = new Set('hello');    // 문자열로 생성 → {'h','e','l','o'}
+```
+
+**`new` 키워드란?**
+
+`new`는 생성자 함수를 기반으로 새 객체를 만들어 반환하는 명령어다. `Set`, `Map`, `Date` 등 내장 객체를 만들 때 사용한다.
+
+```js
+var s = new Set();   // Set 객체 생성
+var d = new Date();  // Date 객체 생성
+```
+
+파이썬의 `set()`, `dict()` 같은 내장 함수 호출과 비슷한 역할이지만, JS에서는 `new` 키워드를 앞에 붙여야 한다.
+
+---
+
+## 문제22 : 배수인지 확인하기
+
+다음 중 변수 i가 6의 배수인지 확인하는 방법으로 올바른 것은?
+
+```
+1) i / 6 == 0
+2) i % 6 == 0
+3) i & 6 == 0
+4) i | 6 == 0
+5) i // 6 == 0
+```
+
+**정답: 2번**
+
+
+---
+
+## 문제23 : OX문제
+
+`console.log(10/3)`의 출력 결과는 **3**이다.
+
+**정답: X**
+
+**해설:** JS에서 `/`는 실수 나눗기다. `10 / 3`은 `3.3333...`을 출력한다. 파이썬과 달리 JS에는 정수 나눗기 연산자(`//`)가 없어서 나눗기 결과는 항상 소수점까지 포함된다. 정수 몫만 원하면 `Math.floor(10 / 3)`을 사용해야 한다.
+
+---
+
+## P24 - 문자열 대문자 변환
+
+```js
+let names = ['mary', 'Tom', 'LUCY'];
+
+for (let n of names) {
+    console.log(n.toUpperCase());
+}
+// MARY, TOM, LUCY
+```
+
+**해석:**
+
+- `toUpperCase()` : 문자열을 모두 대문자로 변환한다. 파이썬의 `.upper()`와 동일하다.
+- 반대로 소문자는 `toLowerCase()`. 파이썬의 `.lower()`와 동일하다.
+
+---
+
+## P25 - 원의 넓이 구하기
+
+```js
+let rads = [2, 3, 5];
+
+for (let r of rads) {
+    console.log(r ** 2 * Math.PI);
+}
+```
+
+**해석:**
+
+- `Math.PI` : 원주율(π) 상수. 파이썬의 `math.pi`와 동일하다.
+- `r ** 2` : 반지름의 제곱. 원의 넓이 공식은 `π * r²`다.
+
+---
+
+## P26 - 객체로 한영 행성 이름 변환
+
+```js
+const planets = {
+    '수성': 'Mercury',
+    '금성': 'Venus',
+    '지구': 'Earth',
+    '화성': 'Mars',
+    '목성': 'Jupiter',
+    '토성': 'Saturn',
+    '천왕성': 'Uranus',
+    '해왕성': 'Neptune'
+};
+
+let input = ['금성', '토성', '지구', '화성'];
+
+for (let i of input) {
+    console.log(planets[i]);
+}
+// Venus, Saturn, Earth, Mars
+```
+
+**해석:**
+
+- 객체를 딕셔너리처럼 활용해 한글 키로 영어 값을 조회한다. 파이썬의 `dict`와 동일한 방식이다.
+- `planets[i]`로 동적으로 키를 조회한다.
+
+---
+
+## P27 - 두 배열로 객체 만들기
+
+```js
+const keys = first_input.split(' ');    // ['Yujin', 'Hyewon']
+const values = second_input.split(' '); // ['70', '100']
+
+const obj = {};
+
+for (let i = 0; i < keys.length; i++) {
+    obj[keys[i]] = Number(values[i]);
+}
+
+console.log(obj); // { Yujin: 70, Hyewon: 100 }
+```
+
+**해석:**
+
+- `split(' ')` : 공백 기준으로 문자열을 쪼개 배열로 반환한다. 파이썬의 `.split(' ')`과 동일하다.
+- `Number()` : 문자열을 숫자로 변환한다. 파이썬의 `int()` 또는 `float()`과 유사하다.
+- `obj[keys[i]] = ...` : 동적으로 객체에 키를 추가하는 방식이다.
+- `keys`, `values`, `obj` 모두 `const`로 선언 가능하다. 재할당이 없고 내부 수정만 하기 때문이다.
