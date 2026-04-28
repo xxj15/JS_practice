@@ -537,3 +537,197 @@ console.log(obj); // { Yujin: 70, Hyewon: 100 }
 - `Number()` : 문자열을 숫자로 변환한다. 파이썬의 `int()` 또는 `float()`과 유사하다.
 - `obj[keys[i]] = ...` : 동적으로 객체에 키를 추가하는 방식이다.
 - `keys`, `values`, `obj` 모두 `const`로 선언 가능하다. 재할당이 없고 내부 수정만 하기 때문이다.
+
+---
+
+## P28 - 연속된 두 문자 쌍 출력
+
+```js
+let word = 'JavaScript';
+
+for (let i = 0; i < word.length - 1; i++) {
+    console.log(word[i], word[i + 1]);
+}
+// J a
+// a v
+// v a
+// ...
+// p t
+```
+
+**해석:**
+
+- `word[i]`와 `word[i+1]`을 함께 출력해 인접한 두 문자 쌍을 순서대로 나열한다.
+- 조건을 `i < word.length - 1`로 설정해 마지막 인덱스에서 `i+1`이 범위를 벗어나지 않게 막는다.
+- 문자열 인덱싱(`str[i]`)은 파이썬과 동일하다.
+
+---
+
+## P29 - 대문자 여부 판별
+
+```js
+let words = ['N', 'C', 'T', 'W', 'i', 's', 'h'];
+
+for (let word of words) {
+    if (word === word.toUpperCase()) {
+        console.log('YES');
+    } else {
+        console.log('NO');
+    }
+}
+// YES YES YES YES NO NO NO
+```
+
+**해석:**
+
+- `word === word.toUpperCase()` : 원래 값과 대문자로 변환한 값이 같으면 이미 대문자라는 뜻이다.
+- 별도의 정규식 없이 `toUpperCase()` 비교만으로 대/소문자를 구분할 수 있다.
+- `toLowerCase()`로 같은 방식의 소문자 판별도 가능하다.
+
+---
+
+## P30 - 문자열 내 단어 위치 찾기 (indexOf)
+
+```js
+let sentence = 'pineapple is yummy';
+let word = 'apple';
+
+console.log(sentence.indexOf(word)); // 4
+```
+
+**해석:**
+
+- `indexOf(검색어)` : 문자열에서 검색어가 처음 등장하는 인덱스를 반환한다. 파이썬의 `.find()`와 동일하다.
+- `'pineapple'`에서 `'apple'`은 인덱스 4부터 시작하므로 `4`를 출력한다.
+- 찾는 문자열이 없으면 `-1`을 반환한다.
+
+---
+
+## P31 - 배열 내장함수의 시간 복잡도
+
+**문제:** 다음 배열 내장함수의 시간 복잡도가 O(1)이 아닌 것을 모두 고르시오.
+
+```
+1) arr[i]
+2) arr.push(5)
+3) arr.slice()
+4) arr.pop()
+5) arr.includes(5)
+```
+
+**정답: 3번, 5번**
+
+| 보기 | 복잡도 | 이유 |
+|------|--------|------|
+| `arr[i]` | O(1) | 인덱스로 메모리 주소를 직접 계산해 접근 |
+| `arr.push(5)` | O(1) | 배열 끝에 요소 하나만 추가 |
+| `arr.slice()` | **O(n)** | 배열 전체(또는 일부)를 새 배열로 복사 |
+| `arr.pop()` | O(1) | 배열 끝 요소 하나만 제거 |
+| `arr.includes(5)` | **O(n)** | 값을 찾기 위해 배열을 처음부터 순차 탐색 |
+
+**해설:**
+
+- **O(1)** : 배열 크기(n)와 무관하게 항상 일정한 시간이 걸린다.
+- **O(n)** : 배열 크기에 비례해 시간이 늘어난다.
+- `slice()`는 복사할 요소 수만큼 반복하므로 O(n)이다.
+- `includes()`는 최악의 경우 전체를 다 훑어야 하므로 O(n)이다.
+- `push()` / `pop()`은 배열 끝만 건드리므로 O(1)이다. (앞을 건드리는 `unshift()` / `shift()`는 재배치가 필요해 O(n))
+
+---
+
+## P32 - 문장의 단어 수 세기
+
+**문제:** 문장을 공백 기준으로 나눠 단어가 몇 개인지 출력하세요.
+
+```js
+let sentence = '안녕하세요. 저는 제주대학교 컴퓨터공학전공 혜림입니다.';
+
+// 내 풀이: for...of로 직접 카운트
+let words = sentence.split(' ');
+let count = 0;
+for (let word of words) {
+    count++;
+}
+console.log(count); // 5
+
+// 모범답안: length 속성으로 바로 구하기
+// console.log(words.length);
+```
+
+**해석:**
+
+- `split(' ')` : 공백 기준으로 문자열을 쪼개 배열로 반환한다. 파이썬의 `.split(' ')`과 동일하다.
+- 단어 수는 `배열.length`로 바로 구할 수 있다. `for`문으로 카운트할 필요가 없다.
+- 파이썬의 `len(sentence.split())`과 동일한 발상이다.
+
+---
+
+## P33 - 숫자 배열 뒤집어 출력하기
+
+**문제:** `'1 2 3 4 5'`를 입력받아 역순으로 출력하세요.
+
+```js
+let nums = '1 2 3 4 5';
+let num_list = nums.split(' ');
+
+// 내 풀이: 인덱스를 역순으로 계산해 새 배열에 push
+let new_list = [];
+for (let i = 0; i < num_list.length; i++) {
+    new_list.push(num_list[num_list.length - 1 - i]);
+}
+console.log(new_list.join(' ')); // 5 4 3 2 1
+
+// 모범답안: reverse()로 바로 뒤집기
+// const data = prompt('숫자를 입력하세요.').split(' ').reverse();
+// console.log(data.join(' '));
+```
+
+**해석:**
+
+- `reverse()` : 배열을 **원본을 직접 뒤집어** 반환한다. 파이썬의 `list.reverse()`와 동일하다.
+- `join(' ')` : 배열 요소를 공백으로 이어붙여 문자열로 만든다. 파이썬의 `' '.join(list)`와 동일하다.
+- 모범답안처럼 `split().reverse().join()`을 **메서드 체이닝**으로 한 줄에 쓰는 것이 JS 관용 표현이다.
+
+```js
+// 메서드 체이닝 비교
+// JS
+'1 2 3 4 5'.split(' ').reverse().join(' '); // '5 4 3 2 1'
+// Python
+' '.join('1 2 3 4 5'.split()[::-1])        # '5 4 3 2 1'
+```
+
+---
+
+## P34 - 배열이 정렬되어 있는지 확인하기
+
+**문제:** 학생 키 목록이 오름차순으로 정렬되어 있으면 YES, 아니면 NO를 출력하세요.
+
+```js
+let students = '176 156 155 165 166 169';
+let studentList = students.split(' ');
+
+if (students === studentList.sort((a, b) => a - b).join(' ')) {
+    console.log('YES');
+} else {
+    console.log('NO');
+} // NO
+```
+
+**해석:**
+
+- 정렬 후 다시 `join(' ')`으로 문자열로 합쳐서 **원본 문자열과 비교**한다. 같으면 이미 정렬된 것.
+- 원본 배열 복사 없이 문자열 비교로 해결하는 깔끔한 발상이다.
+- `sort()` 기본 동작은 **문자열 사전순** 정렬이라 숫자에 그대로 쓰면 틀릴 수 있다.
+
+```js
+['9', '10', '2'].sort()              // ['10', '2', '9'] ← 사전순이라 틀림
+['9', '10', '2'].sort((a, b) => a - b) // ['2', '9', '10'] ← 숫자 오름차순
+```
+
+- `(a, b) => a - b` : 두 요소를 빼서 양수/음수/0으로 정렬 순서를 결정한다. 결과가 음수면 `a`가 앞, 양수면 `b`가 앞으로 간다.
+- 내림차순은 `(a, b) => b - a`로 뒤집으면 된다.
+
+| | 파이썬 | JS |
+|---|---|---|
+| 오름차순 | `sorted(arr)` | `arr.sort((a, b) => a - b)` |
+| 내림차순 | `sorted(arr, reverse=True)` | `arr.sort((a, b) => b - a)` |
