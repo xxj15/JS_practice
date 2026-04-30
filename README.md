@@ -731,3 +731,160 @@ if (students === studentList.sort((a, b) => a - b).join(' ')) {
 |---|---|---|
 | 오름차순 | `sorted(arr)` | `arr.sort((a, b) => a - b)` |
 | 내림차순 | `sorted(arr, reverse=True)` | `arr.sort((a, b) => b - a)` |
+
+---
+
+## P35 - 클로저 (Closure)
+
+**문제:** 아래 코드의 출력값을 예상하세요.
+
+```js
+function one(n) {
+  function two(value) {
+    const sq = Math.pow(value, n);
+    return sq;
+  }
+  return two;
+}
+
+const a = one(2);
+const b = one(3);
+const c = one(4);
+
+console.log(a(10)); // 100
+console.log(b(10)); // 1000
+console.log(c(10)); // 10000
+```
+
+**해석:**
+
+- `one(n)`은 함수 `two`를 반환한다. 이처럼 **함수가 함수를 반환하는 구조**를 클로저(Closure)라고 한다.
+- `a = one(2)`를 호출하면 `n=2`가 기억된 `two` 함수가 `a`에 저장된다.
+- 이후 `a(10)`을 호출하면 `Math.pow(10, 2)` → `100`이 반환된다.
+- 핵심은 `one()`이 끝난 뒤에도 `n` 값이 사라지지 않고 반환된 함수 안에 **살아있다**는 점이다.
+
+```
+a(10) → Math.pow(10, 2) = 100
+b(10) → Math.pow(10, 3) = 1000
+c(10) → Math.pow(10, 4) = 10000
+```
+
+---
+
+## P36 - 구구단 출력
+
+**문제:** 입력받은 단의 구구단을 한 줄로 출력하세요.
+
+```js
+// 내 풀이
+let i = 3;
+let result = '';
+
+for (let j = 1; j <= 9; j++) {
+    result += `${i * j} `;
+}
+console.log(result); // 3 6 9 12 15 18 21 24 27
+
+// 모범답안
+const i = parseInt(prompt('단을 입력하세요.'));
+const result = Array.from({length: 9}, (_, j) => i * (j + 1));
+console.log(result.join(' '));
+```
+
+**해석:**
+
+- 내 풀이는 `for`문으로 1~9를 순회하며 `i * j`를 문자열에 누적한다.
+- 모범답안의 `Array.from({length: 9}, (_, j) => ...)` 는 길이 9짜리 배열을 만들면서 각 요소를 콜백으로 채우는 방식이다.
+- `join(' ')` 으로 배열을 공백으로 이어붙인다.
+
+---
+
+## P37 - 최다 득표자 찾기
+
+**문제:** 공백으로 구분된 학생 이름 목록을 입력받아 가장 많은 표를 받은 학생과 표 수를 출력하세요.
+
+```js
+// 내 풀이
+let students = '원범 원범 혜원 혜원 혜원 혜원 유진 유진';
+let studentList = students.split(' ');
+
+let result = {};
+
+for (student of studentList) {
+    result[student] = result[student] === undefined ? 1 : result[student] + 1;
+}
+
+let max_ans = 0;
+let max_student = '';
+
+for (key in result) {
+    if (result[key] > max_ans) {
+        max_ans = result[key];
+        max_student = key;
+    }
+}
+console.log(`${max_student} : ${max_ans} 표`); // 혜원 : 4 표
+
+// 모범답안
+const counts = {};
+for (const s of studentList) {
+    counts[s] = (counts[s] || 0) + 1;
+}
+const [name, votes] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+console.log(`${name} : ${votes} 표`);
+```
+
+**해석:**
+
+- 내 풀이는 객체를 딕셔너리처럼 써서 이름별 카운트를 저장한 뒤, `for...in`으로 순회해 최댓값을 찾는다.
+- `result[student] === undefined ? 1 : result[student] + 1` — 처음 등장하면 1, 이미 있으면 +1.
+- 모범답안의 `(counts[s] || 0) + 1` 은 같은 로직을 더 짧게 쓴 것이다. `undefined || 0` → `0`이 되므로 동일하게 동작한다.
+- `Object.entries(counts)` 로 `[["원범", 2], ["혜원", 4], ...]` 형태로 변환한 뒤 값 기준으로 정렬해 첫 번째 요소를 꺼낸다.
+
+---
+
+## P38 - 호준이의 아르바이트
+
+**문제:** 학생들의 점수를 공백으로 구분하여 입력받고 1~3위 사탕을 받을 학생의 수를 출력하세요. (동점자 포함)
+
+```js
+// 내 풀이
+let scores = '97 86 75 66 55 97 85 97 97 95'.split(' ');
+scores = scores.sort((a, b) => b - a);
+
+let cnt = 1;
+let ans = 1;
+
+for (let i = 0; i < scores.length - 1; i++) {
+    cnt = scores[i] === scores[i + 1] ? cnt : cnt + 1;
+    if (cnt === 4) {
+        break;
+    }
+    ans += 1;
+}
+console.log(ans); // 6
+
+// 모범답안
+const scores = prompt('점수입력').split(' ').map(function(n) {
+    return parseInt(n, 10);
+});
+scores.sort((a, b) => a - b);
+
+let count = 0;
+let arr = [];
+
+while (arr.length < 3) {
+    let n = scores.pop();
+    if (!arr.includes(n)) {
+        arr.push(n);
+    }
+    count += 1;
+}
+console.log(count);
+```
+
+**해석:**
+
+- **내 풀이**: 내림차순 정렬 후 인접한 값이 달라질 때마다 `cnt`를 올린다. `cnt`가 4가 되는 순간(4위 점수 등장) break하고 그때까지 센 `ans`를 출력한다.
+- **모범답안**: 오름차순 정렬 후 `pop()`으로 뒤에서부터 꺼낸다. 새로운 점수면 `arr`에 추가하고, `arr`에 서로 다른 점수가 3개 쌓이면 종료. 꺼낸 횟수(`count`)가 곧 사탕 받을 학생 수다.
+- `!arr.includes(n)` — 아직 등록 안 된 점수일 때만 `arr`에 push해 3가지 등수를 추적한다.
