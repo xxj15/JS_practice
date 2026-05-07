@@ -888,3 +888,73 @@ console.log(count);
 - **내 풀이**: 내림차순 정렬 후 인접한 값이 달라질 때마다 `cnt`를 올린다. `cnt`가 4가 되는 순간(4위 점수 등장) break하고 그때까지 센 `ans`를 출력한다.
 - **모범답안**: 오름차순 정렬 후 `pop()`으로 뒤에서부터 꺼낸다. 새로운 점수면 `arr`에 추가하고, `arr`에 서로 다른 점수가 3개 쌓이면 종료. 꺼낸 횟수(`count`)가 곧 사탕 받을 학생 수다.
 - `!arr.includes(n)` — 아직 등록 안 된 점수일 때만 `arr`에 push해 3가지 등수를 추적한다.
+
+---
+
+## P39 - 문자 치환 (replaceAll)
+
+**문제:** 문자열 배열에서 `'q'`를 모두 `'e'`로 바꿔 출력하세요.
+
+```js
+let inputs = ['querty', 'hqllo my namq is hyqwon'];
+
+for (let sentence of inputs) {
+    console.log(sentence.replaceAll('q', 'e'));
+}
+// euerty
+// hello my name is hyewon
+```
+
+**해석:**
+
+- `replaceAll(a, b)` : 문자열 내 `a`를 모두 `b`로 교체한 새 문자열을 반환한다.
+- `replace(a, b)`는 첫 번째 일치 항목만 교체하지만, `replaceAll`은 전체를 교체한다.
+- JS에서 문자열은 **불변(immutable)** 이라 `for...of`로 순회하며 문자 하나에 직접 대입(`s = 'e'`)해도 원본이 바뀌지 않는다. 문자를 바꾸려면 반드시 새 문자열을 만들어야 한다.
+
+---
+
+## P40 - 최대 무게 제한 (구조분해 할당)
+
+**문제:** 최대 무게와 박스 개수, 박스별 무게가 주어질 때 최대 무게를 초과하지 않고 실을 수 있는 박스 수를 출력하세요.
+
+```js
+let inputs = '50 5 20 20 20 20 20';
+let [max_weight, n, ...weights] = inputs.split(' ');
+max_weight = Number(max_weight);
+n = Number(n);
+weights = weights.map(Number);
+
+let weight = 0;
+let ans = 0;
+for (let i = 0; i < n; i++) {
+    weight += weights[i];
+    if (weight <= max_weight) {
+        ans += 1;
+    }
+}
+console.log(ans); // 2
+```
+
+**해석:**
+
+**구조분해 할당** — 배열의 요소를 한 번에 여러 변수에 나눠 담는 문법이다.
+
+```js
+let [max_weight, n, ...weights] = inputs.split(' ');
+// inputs.split(' ') → ['50', '5', '20', '20', '20', '20', '20']
+// max_weight → '50'
+// n          → '5'
+// weights    → ['20', '20', '20', '20', '20']  (나머지 전부)
+```
+
+- `...weights` : 나머지 연산자(rest). 앞의 변수들이 하나씩 받고 남은 요소를 배열로 모아준다.
+
+**숫자 변환** — `split()`은 문자열 배열을 반환하므로 숫자 연산 전에 반드시 변환해야 한다.
+
+```js
+max_weight = Number(max_weight);  // '50' → 50
+n = Number(n);                    // '5'  → 5
+weights = weights.map(Number);    // ['20','20',...] → [20,20,...]
+```
+
+- 변환하지 않으면 `weight += weights[i]`에서 `0 + '20'` → `'020'` 처럼 문자열 연결이 발생한다.
