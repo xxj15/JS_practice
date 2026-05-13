@@ -958,3 +958,187 @@ weights = weights.map(Number);    // ['20','20',...] → [20,20,...]
 ```
 
 - 변환하지 않으면 `weight += weights[i]`에서 `0 + '20'` → `'020'` 처럼 문자열 연결이 발생한다.
+
+---
+
+## P41 - 소수 판별
+
+**문제:** 주어진 숫자 목록에서 각각이 소수인지 판별해 YES/NO를 출력하세요.
+
+```js
+let numbers = [2, 3, 5, 6, 10, 13];
+
+for (let num of numbers) {
+    let isPrime = true;
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i == 0) {
+            isPrime = false;
+            break;
+        }
+    }
+    console.log(isPrime ? 'YES' : 'NO');
+}
+// YES YES YES NO NO YES
+```
+
+**해석:**
+
+- 소수 판별의 핵심은 2부터 `√num`까지만 나눠보는 것이다. `√num` 이상의 약수는 반드시 `√num` 이하의 약수와 쌍을 이루기 때문이다.
+- `Math.sqrt(num)` : 제곱근 계산. 파이썬의 `math.sqrt(num)` 또는 `num ** 0.5`와 동일하다.
+- 약수가 하나라도 발견되면 `isPrime = false`로 설정하고 `break`로 내부 루프를 탈출한다.
+- 삼항 연산자 `조건 ? 참값 : 거짓값` — 파이썬의 `'YES' if isPrime else 'NO'`와 동일하다.
+
+---
+
+## P42 - 요일 구하기
+
+**문제:** 월(month)과 일(date)을 입력받아 2026년 기준 해당 날짜의 요일을 출력하세요.
+
+```js
+let month = 5, date = 8;
+
+function solution(a, b) {
+    const day = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const x = new Date('2026-' + a + '-' + b);
+    return day[x.getDay()];
+}
+
+console.log(solution(month, date)); // THU
+```
+
+**해석:**
+
+- `new Date('YYYY-MM-DD')` : 날짜 문자열로 Date 객체를 생성한다.
+- `getDay()` : 요일을 숫자로 반환한다. 0(일요일) ~ 6(토요일) 순서다.
+- 요일 배열 `["SUN", "MON", ...]`을 미리 만들어 인덱스로 접근하면 숫자를 문자열로 깔끔하게 변환할 수 있다.
+
+| `getDay()` 값 | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|---|
+| 요일 | SUN | MON | TUE | WED | THU | FRI | SAT |
+
+---
+
+## P43 - 이진수 변환
+
+**문제:** 숫자 목록을 이진수로 변환 후 출력하고, 다시 10진수로 복원해 출력하세요.
+
+```js
+let numbers = [1, 8, 19, 28893];
+
+for (let num of numbers) {
+    let ans2 = num.toString(2);
+    console.log(`Binary : ${ans2}`);
+    let ans10 = parseInt(ans2, 2);
+    console.log(`Decimal : ${ans10}`);
+}
+// Binary : 1 / Decimal : 1
+// Binary : 1000 / Decimal : 8
+// Binary : 10011 / Decimal : 19
+// Binary : 111000011011101 / Decimal : 28893
+```
+
+**해석:**
+
+- `num.toString(2)` : 숫자를 2진수 문자열로 변환한다. 인자로 진수(radix)를 지정한다.
+  - `toString(8)` → 8진수, `toString(16)` → 16진수
+  - 파이썬의 `bin(num)` (단, `'0b'` 접두사가 없는 버전)
+- `parseInt(문자열, 2)` : 2진수 문자열을 10진수 정수로 변환한다. 두 번째 인자가 진수(radix)다.
+  - 파이썬의 `int(문자열, 2)`와 완전히 동일하다.
+
+| 변환 방향 | JS | Python |
+|---|---|---|
+| 10진수 → 2진수 | `num.toString(2)` | `bin(num)[2:]` |
+| 2진수 → 10진수 | `parseInt(str, 2)` | `int(str, 2)` |
+
+---
+
+## P44 - 각 자릿수의 합
+
+**문제:** 숫자 목록에서 각 숫자의 자릿수를 모두 더한 값을 출력하세요.
+
+```js
+let inputs = [18234, 3849];
+
+for (let num of inputs) {
+    let ans = 0;
+    let str = num.toString();
+    for (let i = 0; i < str.length; i++) {
+        ans += Number(str[i]);
+    }
+    console.log(ans);
+}
+// 18 (1+8+2+3+4)
+// 24 (3+8+4+9)
+```
+
+**해석:**
+
+- `num.toString()` : 숫자를 문자열로 변환해 각 자리에 인덱스로 접근한다. 파이썬의 `str(num)`과 동일하다.
+- `Number(str[i])` : 문자 `'1'`을 숫자 `1`로 변환한다. `+str[i]`로 단축 표현도 가능하다.
+- 파이썬에서는 `sum(int(d) for d in str(num))`으로 한 줄에 쓸 수 있다.
+
+---
+
+## P45 - 현재 연도 구하기
+
+**문제:** Date 객체의 `getTime()`을 활용해 현재 연도를 출력하세요.
+
+```js
+const d = new Date();
+let year = d.getTime();
+year = Math.floor(year / (3600 * 24 * 365 * 1000)) + 1970;
+console.log(year); // 현재 연도 (예: 2026)
+```
+
+**해석:**
+
+- `new Date()` : 현재 날짜/시간 정보를 담은 Date 객체를 생성한다.
+- `getTime()` : Unix 에포크(1970-01-01 00:00:00 UTC) 이후 경과한 **밀리초**를 반환한다.
+- 밀리초를 1년(초) `3600 * 24 * 365`로 나누고, 다시 1000으로 나눠(ms → s) 경과 연수를 구한 뒤 1970을 더한다.
+- 실제로는 `new Date().getFullYear()`가 훨씬 간결하고 윤년도 정확히 처리한다.
+
+```js
+// 권장 방법
+console.log(new Date().getFullYear()); // 2026
+```
+
+---
+
+## P46 - 1~20 자릿수 합 총계
+
+**문제:** 1부터 20까지의 모든 수에서 각 자릿수를 합산한 총합을 출력하세요.
+
+```js
+let arr = [];
+let sum = 0;
+
+for (let i = 1; i <= 20; i++) {
+    arr.push(i);
+}
+
+arr.forEach((n) => {
+    while (n !== 0) {
+        sum += (n % 10);
+        n = Math.floor(n / 10);
+    }
+});
+
+console.log(sum); // 102
+```
+
+**해석:**
+
+- `arr.forEach(콜백)` : 배열의 각 요소에 콜백 함수를 실행한다. `for...of`와 비슷하지만 인덱스도 받을 수 있다.
+- `while`로 자릿수를 하나씩 추출하는 방법:
+  - `n % 10` : 1의 자리 숫자를 꺼낸다.
+  - `Math.floor(n / 10)` : 1의 자리를 버리고 나머지 자리로 이동한다.
+  - `n`이 0이 될 때까지 반복한다.
+
+```
+예: n = 19
+  19 % 10 = 9  → sum += 9,  n = Math.floor(19/10) = 1
+  1  % 10 = 1  → sum += 1,  n = Math.floor(1/10)  = 0
+  종료
+```
+
+- 파이썬으로는 `sum(int(d) for n in range(1, 21) for d in str(n))`으로 한 줄에 쓸 수 있다.
